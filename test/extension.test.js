@@ -93,18 +93,18 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
       {
         packageJSON: {
           contributes: {
-            themes: [{ label: 'Theme A' }, { label: 'Theme B' }],
+            themes: [{ label: 'Theme A' }, { label: 'Theme B' }, { label: 'Theme C' }],
           },
         },
       },
     ],
   });
 
-  const extension = createExtensionApi(api, { random: () => 0 });
+  const extension = createExtensionApi(api, { random: () => 0.6 });
   await extension.randomizeTheme();
 
   assert.equal(updateCalls.length, 1);
-  assert.deepEqual(updateCalls[0], { key: 'colorTheme', value: 'Theme B', target: 1 });
+  assert.deepEqual(updateCalls[0], { key: 'colorTheme', value: 'Theme C', target: 1 });
 });
 
 test('randomizeTheme warns when no themes are available', async () => {
