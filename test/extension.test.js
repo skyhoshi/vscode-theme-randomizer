@@ -105,6 +105,7 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
 
   assert.equal(updateCalls.length, 1);
   assert.deepEqual(updateCalls[0], { key: 'colorTheme', value: 'Theme B', target: 1 });
+  assert.notEqual(updateCalls[0].value, 'Theme A');
 });
 
 test('randomizeTheme warns when no themes are available', async () => {
