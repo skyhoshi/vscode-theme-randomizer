@@ -107,7 +107,7 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
   assert.equal(updateCalls[0].key, 'colorTheme');
   assert.equal(updateCalls[0].target, 1);
   assert.notEqual(updateCalls[0].value, 'Theme A');
-  assert.ok(['Theme B', 'Theme C'].includes(updateCalls[0].value));
+  assert.equal(updateCalls[0].value, 'Theme C');
 });
 
 test('randomizeTheme warns when no themes are available', async () => {
@@ -118,4 +118,26 @@ test('randomizeTheme warns when no themes are available', async () => {
 
   assert.equal(updateCalls.length, 0);
   assert.deepEqual(warnings, ['No installed color themes were found.']);
+});
+
+
+test('randomizeTheme falls back to current theme when it is the only option', async () => {
+  const { api, updateCalls } = createMockVscode({
+    currentTheme: 'Theme A',
+    themes: [
+      {
+        packageJSON: {
+          contributes: {
+            themes: [{ label: 'Theme A' }],
+          },
+        },
+      },
+    ],
+  });
+
+  const extension = createExtensionApi(api, { random: () => 0 });
+  await extension.randomizeTheme();
+
+  assert.equal(updateCalls.length, 1);
+  assert.deepEqual(updateCalls[0], { key: 'colorTheme', value: 'Theme A', target: 1 });
 });
