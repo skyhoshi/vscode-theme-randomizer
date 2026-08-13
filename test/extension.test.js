@@ -1,7 +1,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { _createExtensionApi } = require('../src/extension');
+const { createExtensionApi } = require('../src/themeRandomizer');
 
 function createMockVscode({ themes = [], currentTheme = 'Default Dark+', startupSetting = false } = {}) {
   const updateCalls = [];
@@ -82,7 +82,7 @@ test('getInstalledThemeLabels returns unique non-empty labels', () => {
     ],
   });
 
-  const extension = _createExtensionApi(api);
+  const extension = createExtensionApi(api);
   assert.deepEqual(extension.getInstalledThemeLabels().sort(), ['Theme A', 'Theme B', 'Theme C']);
 });
 
@@ -100,15 +100,8 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
     ],
   });
 
-  const extension = _createExtensionApi(api);
-  const originalRandom = Math.random;
-  Math.random = () => 0;
-
-  try {
-    await extension.randomizeTheme();
-  } finally {
-    Math.random = originalRandom;
-  }
+  const extension = createExtensionApi(api, { random: () => 0 });
+  await extension.randomizeTheme();
 
   assert.equal(updateCalls.length, 1);
   assert.deepEqual(updateCalls[0], { key: 'colorTheme', value: 'Theme B', target: 1 });
@@ -116,7 +109,7 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
 
 test('randomizeTheme warns when no themes are available', async () => {
   const { api, updateCalls, warnings } = createMockVscode();
-  const extension = _createExtensionApi(api);
+  const extension = createExtensionApi(api);
 
   await extension.randomizeTheme();
 
