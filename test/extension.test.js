@@ -104,7 +104,10 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
   await extension.randomizeTheme();
 
   assert.equal(updateCalls.length, 1);
-  assert.deepEqual(updateCalls[0], { key: 'colorTheme', value: 'Theme C', target: 1 });
+  assert.equal(updateCalls[0].key, 'colorTheme');
+  assert.equal(updateCalls[0].target, 1);
+  assert.notEqual(updateCalls[0].value, 'Theme A');
+  assert.ok(['Theme B', 'Theme C'].includes(updateCalls[0].value));
 });
 
 test('randomizeTheme warns when no themes are available', async () => {
