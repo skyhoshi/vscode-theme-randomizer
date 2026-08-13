@@ -1,0 +1,23 @@
+{
+  "name": "vscode-theme-randomizer",
+  "displayName": "VSCode Theme Randomizer",
+  "description": "Randomize the current VS Code color theme.",
+  "version": "0.0.1",
+  "publisher": "skyhoshi",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [],
+  "contributes": {},
+  "scripts": {
+    "test": "echo \"No tests configured\""
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0"
+  }
+}
