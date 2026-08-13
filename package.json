@@ -1,6 +1,6 @@
 {
   "name": "vscode-theme-randomizer",
-  "displayName": "VSCode Theme Randomizer",
+  "displayName": "VS Code Theme Randomizer",
   "description": "Randomize the current VS Code color theme.",
   "version": "0.0.1",
   "publisher": "skyhoshi",
@@ -48,7 +48,7 @@
       }
     ],
     "configuration": {
-      "title": "VSCode Theme Randomizer",
+      "title": "VS Code Theme Randomizer",
       "properties": {
         "vscodeThemeRandomizer.randomizeOnStartup": {
           "type": "boolean",

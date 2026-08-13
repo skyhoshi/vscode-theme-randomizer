@@ -48,7 +48,7 @@ function activate(context) {
     .getConfiguration(CONFIG_SECTION)
     .get(CONFIG_RANDOMIZE_ON_STARTUP, false);
 
-  if (shouldRandomizeOnStartup) {
+  if (shouldRandomizeOnStartup && context.extensionMode !== vscode.ExtensionMode.Test) {
     void randomizeTheme();
   }
 }
