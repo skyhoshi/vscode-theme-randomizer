@@ -12,8 +12,52 @@
     "Other"
   ],
   "main": "./src/extension.js",
-  "activationEvents": [],
-  "contributes": {},
+  "activationEvents": [
+    "onCommand:vscodeThemeRandomizer.randomizeTheme",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscodeThemeRandomizer.randomizeTheme",
+        "title": "Randomize Theme"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "vscodeThemeRandomizer.sidebarView",
+          "name": "Theme Randomizer"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "vscodeThemeRandomizer.randomizeTheme",
+          "when": "view == vscodeThemeRandomizer.sidebarView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "vscodeThemeRandomizer.sidebarView",
+        "contents": "[Randomize Theme](command:vscodeThemeRandomizer.randomizeTheme)",
+        "when": "true"
+      }
+    ],
+    "configuration": {
+      "title": "VSCode Theme Randomizer",
+      "properties": {
+        "vscodeThemeRandomizer.randomizeOnStartup": {
+          "type": "boolean",
+          "default": false,
+          "description": "Randomize the VS Code color theme when a window opens."
+        }
+      }
+    }
+  },
   "scripts": {
     "test": "echo \"No tests configured\""
   },
