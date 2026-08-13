@@ -59,7 +59,7 @@
     }
   },
   "scripts": {
-    "test": "echo \"No tests configured\""
+    "test": "node --test test/**/*.test.js"
   },
   "devDependencies": {
     "@types/vscode": "^1.90.0"
