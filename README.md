@@ -12,7 +12,7 @@ Randomize your VS Code color theme from the sidebar, or automatically when a win
 1. Open the **Theme Randomizer** view in the Explorer sidebar.
 2. Click **Randomize Theme** in the view title or in the view welcome content.
 
-## Local development setup (Windows 11)
+## Local testing on Windows 11
 
 1. Install prerequisites:
    - [Git for Windows](https://git-scm.com/download/win)
@@ -22,17 +22,25 @@ Randomize your VS Code color theme from the sidebar, or automatically when a win
    ```powershell
    git clone https://github.com/skyhoshi/vscode-theme-randomizer.git
    cd vscode-theme-randomizer
-   ```
-3. Install dependencies:
-   ```powershell
    npm install
-   ```
-4. Open the folder in VS Code:
-   ```powershell
    code .
    ```
-5. Press `F5` in VS Code to launch an **Extension Development Host** window and test the extension locally.
-6. Run tests from a terminal when needed:
+3. In VS Code, open **Run and Debug** (`Ctrl+Shift+D`).
+4. Create a launch configuration:
+   - Click **create a launch.json file**
+   - Choose **VS Code Extension**
+   - Keep the generated **Run Extension** configuration
+5. Start local testing:
+   - Select **Run Extension** in the debug dropdown
+   - Press `F5` to open an **Extension Development Host** window
+6. In the **Extension Development Host** window, verify the extension:
+   - Open the Explorer sidebar and find **Theme Randomizer**
+   - Click **Randomize Theme** in the view title, or run **Randomize Theme** from the Command Palette
+7. Optional: test startup randomization:
+   - Open Settings in the Extension Development Host
+   - Enable `vscodeThemeRandomizer.randomizeOnStartup`
+   - Run **Developer: Reload Window**
+8. Run automated tests from the project terminal when needed:
    ```powershell
    npm test
    ```
