@@ -4,6 +4,7 @@
   "description": "Randomize the current VS Code color theme.",
   "version": "0.0.1",
   "publisher": "skyhoshi",
+  "icon": "$(debug-restart)",
   "engines": {
     "vscode": "^1.90.0"
   },
@@ -14,6 +15,7 @@
   "main": "./src/extension.js",
   "activationEvents": [
     "onCommand:vscodeThemeRandomizer.randomizeTheme",
+    "onCommand:vscodeThemeRandomizer.resetToDefaultTheme",
     "onStartupFinished"
   ],
   "contributes": {
@@ -21,13 +23,33 @@
       {
         "command": "vscodeThemeRandomizer.randomizeTheme",
         "title": "Randomize Theme"
+      },
+      {
+        "command": "vscodeThemeRandomizer.resetToDefaultTheme",
+        "title": "Reset to Default Theme",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "vscodeThemeRandomizer.selectDefaultTheme",
+        "title": "Select Default Theme",
+        "icon": "$(list-selection)"
       }
     ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vscodeThemeRandomizer",
+          "title": "Theme Randomizer",
+          "icon": "$(debug-restart)"
+        }
+      ]
+    },
     "views": {
-      "explorer": [
+      "vscodeThemeRandomizer": [
         {
           "id": "vscodeThemeRandomizer.sidebarView",
-          "name": "Theme Randomizer"
+          "name": "Theme Randomizer",
+          "icon": "$(debug-restart)"
         }
       ]
     },
@@ -37,13 +59,23 @@
           "command": "vscodeThemeRandomizer.randomizeTheme",
           "when": "view == vscodeThemeRandomizer.sidebarView",
           "group": "navigation"
+        },
+        {
+          "command": "vscodeThemeRandomizer.resetToDefaultTheme",
+          "when": "view == vscodeThemeRandomizer.sidebarView",
+          "group": "navigation"
+        },
+        {
+          "command": "vscodeThemeRandomizer.selectDefaultTheme",
+          "when": "view == vscodeThemeRandomizer.sidebarView",
+          "group": "navigation"
         }
       ]
     },
     "viewsWelcome": [
       {
         "view": "vscodeThemeRandomizer.sidebarView",
-        "contents": "[Randomize Theme](command:vscodeThemeRandomizer.randomizeTheme)",
+        "contents": "$(list-selection) [Select Default Theme](command:vscodeThemeRandomizer.selectDefaultTheme)\n$(sync) [Randomize Theme](command:vscodeThemeRandomizer.randomizeTheme)\n$(discard) [Reset to Default Theme](command:vscodeThemeRandomizer.resetToDefaultTheme)",
         "when": "true"
       }
     ],
@@ -54,6 +86,31 @@
           "type": "boolean",
           "default": false,
           "description": "Randomize the VS Code color theme when a window opens."
+        },
+        "vscodeThemeRandomizer.defaultTheme": {
+          "type": "string",          
+          "default": "",
+          "description": "The color theme to restore with the 'Reset to Default Theme' command. Choose an installed theme with the 'Select Default Theme' command, or leave it empty to capture the active theme before the first randomization."
+        },
+        "vscodeThemeRandomizer.themeType": {
+          "type": "string",
+          "enum": [
+            "hc",
+            "vs",
+            "vs-dark"
+          ],
+          "enumItemLabels": [
+            "All Themes",
+            "Light Themes",
+            "Dark Themes"
+          ],
+          "enumDescriptions": [
+            "Choose from every installed color theme.",
+            "Choose only installed light color themes.",
+            "Choose only installed dark color themes."
+          ],
+          "default": "vs-dark",
+          "description": "The type of color theme to use when randomizing."
         }
       }
     }
