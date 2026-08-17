@@ -3,9 +3,16 @@ const assert = require('node:assert/strict');
 
 const { createExtensionApi } = require('../src/themeRandomizer');
 
-function createMockVscode({ themes = [], currentTheme = 'Default Dark+', startupSetting = false } = {}) {
+function createMockVscode({
+  themes = [],
+  currentTheme = 'Default Dark+',
+  startupSetting = false,
+  defaultTheme = '',
+  themeType = 'system',
+} = {}) {
   const updateCalls = [];
   const warnings = [];
+  const settings = { randomizeOnStartup: startupSetting, defaultTheme, themeType };
 
   return {
     api: {
@@ -31,10 +38,15 @@ function createMockVscode({ themes = [], currentTheme = 'Default Dark+', startup
 
           return {
             get(key, defaultValue) {
-              if (section === 'vscodeThemeRandomizer' && key === 'randomizeOnStartup') {
-                return startupSetting;
+              if (section === 'vscodeThemeRandomizer' && key in settings) {
+                return settings[key];
               }
               return defaultValue;
+            },
+            update(key, value, target) {
+              settings[key] = value;
+              updateCalls.push({ key, value, target });
+              return Promise.resolve();
             },
           };
         },
@@ -43,6 +55,9 @@ function createMockVscode({ themes = [], currentTheme = 'Default Dark+', startup
         showWarningMessage(message) {
           warnings.push(message);
           return Promise.resolve();
+        },
+        showQuickPick(items) {
+          return Promise.resolve(items[0]);
         },
       },
       commands: {
@@ -89,6 +104,7 @@ test('getInstalledThemeLabels returns unique non-empty labels', () => {
 test('randomizeTheme avoids current theme when alternatives exist', async () => {
   const { api, updateCalls } = createMockVscode({
     currentTheme: 'Theme A',
+    defaultTheme: 'Theme A',
     themes: [
       {
         packageJSON: {
@@ -109,6 +125,72 @@ test('randomizeTheme avoids current theme when alternatives exist', async () => 
   assert.equal(updateCalls[0].value, 'Theme C');
 });
 
+test('randomizeTheme only selects themes of the configured type', async () => {
+  const { api, updateCalls } = createMockVscode({
+    currentTheme: 'Theme A',
+    defaultTheme: 'Theme A',
+    themeType: 'dark',
+    themes: [{
+      packageJSON: {
+        contributes: {
+          themes: [
+            { label: 'Theme A', type: 'light' },
+            { label: 'Theme B', type: 'dark' },
+            { label: 'Theme C', type: 'dark' },
+          ],
+        },
+      },
+    }],
+  });
+
+  await createExtensionApi(api, { random: () => 0.9 }).randomizeTheme();
+
+  assert.deepEqual(updateCalls, [{ key: 'colorTheme', value: 'Theme C', target: 1 }]);
+});
+
+test('randomizeTheme stores the active theme as the default on first run only', async () => {
+  const { api, updateCalls } = createMockVscode({
+    currentTheme: 'Theme A',
+    themes: [
+      {
+        packageJSON: {
+          contributes: {
+            themes: [{ label: 'Theme A' }, { label: 'Theme B' }],
+          },
+        },
+      },
+    ],
+  });
+
+  const extension = createExtensionApi(api, { random: () => 0 });
+  await extension.randomizeTheme();
+
+  assert.deepEqual(updateCalls[0], { key: 'defaultTheme', value: 'Theme A', target: 1 });
+
+  await extension.randomizeTheme();
+
+  assert.equal(updateCalls.filter((call) => call.key === 'defaultTheme').length, 1);
+});
+
+test('resetToDefaultTheme restores the stored default theme', async () => {
+  const { api, updateCalls } = createMockVscode({ currentTheme: 'Theme B', defaultTheme: 'Theme A' });
+  const extension = createExtensionApi(api);
+
+  await extension.resetToDefaultTheme();
+
+  assert.deepEqual(updateCalls, [{ key: 'colorTheme', value: 'Theme A', target: 1 }]);
+});
+
+test('resetToDefaultTheme warns when no default theme is stored', async () => {
+  const { api, updateCalls, warnings } = createMockVscode();
+  const extension = createExtensionApi(api);
+
+  await extension.resetToDefaultTheme();
+
+  assert.equal(updateCalls.length, 0);
+  assert.deepEqual(warnings, ['No default color theme has been stored yet.']);
+});
+
 test('randomizeTheme warns when no themes are available', async () => {
   const { api, updateCalls, warnings } = createMockVscode();
   const extension = createExtensionApi(api);
@@ -123,6 +205,7 @@ test('randomizeTheme warns when no themes are available', async () => {
 test('randomizeTheme falls back to current theme when it is the only option', async () => {
   const { api, updateCalls } = createMockVscode({
     currentTheme: 'Theme A',
+    defaultTheme: 'Theme A',
     themes: [
       {
         packageJSON: {
