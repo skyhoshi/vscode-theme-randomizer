@@ -56,6 +56,9 @@ function createMockVscode({
           warnings.push(message);
           return Promise.resolve();
         },
+        showInformationMessage() {
+          return Promise.resolve();
+        },
         showQuickPick(items) {
           return Promise.resolve(items[0]);
         },
