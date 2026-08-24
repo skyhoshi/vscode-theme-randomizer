@@ -46,8 +46,7 @@
         {
           "id": "vscodeThemeRandomizer",
           "title": "Theme Randomizer",
-          "icon": "$(debug-restart)"
-        }
+          "icon": "media/icon.svg"
       ]
     },
     "views": {
