@@ -36,7 +36,7 @@ function createExtensionApi(vscode, options = {}) {
     const configuration = vscode.workspace.getConfiguration('workbench');
     const currentTheme = configuration.get('colorTheme');
 
-    const installedThemes = getInstalledThemes();
+    const installedThemes = getInstalledThemes().filter((theme) => theme.label !== currentTheme);
     if (installedThemes.length === 0) {
       void vscode.window.showWarningMessage('No installed color themes were found.');
       return;
@@ -45,14 +45,14 @@ function createExtensionApi(vscode, options = {}) {
     const extensionConfiguration = vscode.workspace.getConfiguration(CONFIG_SECTION);
     const storedDefaultTheme = extensionConfiguration.get(CONFIG_DEFAULT_THEME, '');
     const themeType = extensionConfiguration.get(CONFIG_THEME_TYPE, 'vs-dark');
-    const flashbombPreventionEnabled = extensionConfiguration.get('flashbombPrevention', true);
+    const flashbangPreventionEnabled = extensionConfiguration.get('flashbangPrevention', true);
 
     // Capture the theme that was active before the first randomization.
     if (!storedDefaultTheme && typeof currentTheme === 'string' && currentTheme.length > 0) {
       await extensionConfiguration.update(CONFIG_DEFAULT_THEME, currentTheme, vscode.ConfigurationTarget.Global, );
     }
 
-    const themesOfRequestedType = themeType === 'vs-dark'
+    const themesOfRequestedType = themeType !== 'vs-dark'
       ? installedThemes
       : installedThemes.filter((theme) => theme.type === themeType);
 
@@ -64,7 +64,7 @@ function createExtensionApi(vscode, options = {}) {
     const candidateThemes = themesOfRequestedType.filter((theme) => theme.label !== currentTheme);
     const pool = candidateThemes.length > 0 ? candidateThemes : themesOfRequestedType;
     const randomTheme = pool[Math.floor(random() * pool.length)].label;
-
+    void vscode.window.showInformationMessage(`Updating Theme to ${randomTheme}`);
     await configuration.update('colorTheme', randomTheme, vscode.ConfigurationTarget.Global);
   }
 

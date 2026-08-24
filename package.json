@@ -1,10 +1,16 @@
 {
-  "name": "vscode-theme-randomizer",
+  "name": "theme-randomizer-vscode",
   "displayName": "VS Code Theme Randomizer",
   "description": "Randomize the current VS Code color theme.",
   "version": "0.0.1",
   "publisher": "skyhoshi",
-  "icon": "$(debug-restart)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skyhoshi/vscode-theme-randomizer.git"
+  },
+  "icon": "media/icon.svg",
+  "author": {"name": "Marcus Kern", "email": "skyhoshi@outlook.com", "url": "http://skyhoshi.com"},
+  "pricing": "Free",
   "engines": {
     "vscode": "^1.90.0"
   },
