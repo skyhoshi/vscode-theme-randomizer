@@ -101,7 +101,7 @@
         "vscodeThemeRandomizer.themeType": {
           "type": "string",
           "enum": [
-            "hc",
+            "all",
             "vs",
             "vs-dark"
           ],
