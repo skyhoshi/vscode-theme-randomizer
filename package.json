@@ -1,0 +1,130 @@
+{
+  "name": "theme-randomizer-vscode",
+  "displayName": "VS Code Theme Randomizer",
+  "description": "Randomize the current VS Code color theme.",
+  "version": "0.0.1",
+  "publisher": "skyhoshi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skyhoshi/vscode-theme-randomizer.git"
+  },
+  "icon": "media/icon.png",
+  "author": {"name": "Marcus Kern", "email": "skyhoshi@outlook.com", "url": "http://skyhoshi.com"},
+  "pricing": "Free",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onCommand:vscodeThemeRandomizer.randomizeTheme",
+    "onCommand:vscodeThemeRandomizer.resetToDefaultTheme",
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscodeThemeRandomizer.randomizeTheme",
+        "title": "Randomize Theme"
+      },
+      {
+        "command": "vscodeThemeRandomizer.resetToDefaultTheme",
+        "title": "Reset to Default Theme",
+        "icon": "$(discard)"
+      },
+      {
+        "command": "vscodeThemeRandomizer.selectDefaultTheme",
+        "title": "Select Default Theme",
+        "icon": "$(list-selection)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vscodeThemeRandomizer",
+          "title": "Theme Randomizer",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "vscodeThemeRandomizer": [
+        {
+          "id": "vscodeThemeRandomizer.sidebarView",
+          "name": "Theme Randomizer",
+          "icon": "$(debug-restart)"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "vscodeThemeRandomizer.randomizeTheme",
+          "when": "view == vscodeThemeRandomizer.sidebarView",
+          "group": "navigation"
+        },
+        {
+          "command": "vscodeThemeRandomizer.resetToDefaultTheme",
+          "when": "view == vscodeThemeRandomizer.sidebarView",
+          "group": "navigation"
+        },
+        {
+          "command": "vscodeThemeRandomizer.selectDefaultTheme",
+          "when": "view == vscodeThemeRandomizer.sidebarView",
+          "group": "navigation"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "vscodeThemeRandomizer.sidebarView",
+        "contents": "$(list-selection) [Select Default Theme](command:vscodeThemeRandomizer.selectDefaultTheme)\n$(sync) [Randomize Theme](command:vscodeThemeRandomizer.randomizeTheme)\n$(discard) [Reset to Default Theme](command:vscodeThemeRandomizer.resetToDefaultTheme)",
+        "when": "true"
+      }
+    ],
+    "configuration": {
+      "title": "VS Code Theme Randomizer",
+      "properties": {
+        "vscodeThemeRandomizer.randomizeOnStartup": {
+          "type": "boolean",
+          "default": false,
+          "description": "Randomize the VS Code color theme when a window opens."
+        },
+        "vscodeThemeRandomizer.defaultTheme": {
+          "type": "string",          
+          "default": "",
+          "description": "The color theme to restore with the 'Reset to Default Theme' command. Choose an installed theme with the 'Select Default Theme' command, or leave it empty to capture the active theme before the first randomization."
+        },
+        "vscodeThemeRandomizer.themeType": {
+          "type": "string",
+          "enum": [
+            "all",
+            "vs",
+            "vs-dark"
+          ],
+          "enumItemLabels": [
+            "All Themes",
+            "Light Themes",
+            "Dark Themes"
+          ],
+          "enumDescriptions": [
+            "Choose from every installed color theme.",
+            "Choose only installed light color themes.",
+            "Choose only installed dark color themes."
+          ],
+          "default": "vs-dark",
+          "description": "The type of color theme to use when randomizing."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test test/**/*.test.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0"
+  }
+}
