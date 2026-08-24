@@ -29,7 +29,7 @@ Short summary of the problem
 - VS Code version:
 - OS:
 - Theme before randomize:
-- Theme type setting (system/light/dark):
+- Theme type setting (all/vs/vs-dark):
 - randomizeOnStartup setting (true/false):
 
 ### Steps to Reproduce
