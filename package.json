@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/skyhoshi/vscode-theme-randomizer.git"
   },
-  "icon": "media/icon.svg",
+  "icon": "media/icon.png",
   "author": {"name": "Marcus Kern", "email": "skyhoshi@outlook.com", "url": "http://skyhoshi.com"},
   "pricing": "Free",
   "engines": {
