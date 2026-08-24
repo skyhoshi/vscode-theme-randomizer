@@ -47,6 +47,7 @@
           "id": "vscodeThemeRandomizer",
           "title": "Theme Randomizer",
           "icon": "media/icon.svg"
+        }
       ]
     },
     "views": {
