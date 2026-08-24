@@ -132,14 +132,14 @@ test('randomizeTheme only selects themes of the configured type', async () => {
   const { api, updateCalls } = createMockVscode({
     currentTheme: 'Theme A',
     defaultTheme: 'Theme A',
-    themeType: 'dark',
+    themeType: 'vs-dark',
     themes: [{
       packageJSON: {
         contributes: {
           themes: [
-            { label: 'Theme A', type: 'light' },
-            { label: 'Theme B', type: 'dark' },
-            { label: 'Theme C', type: 'dark' },
+            { label: 'Theme A', uiTheme: 'vs' },
+            { label: 'Theme B', uiTheme: 'vs-dark' },
+            { label: 'Theme C', uiTheme: 'vs-dark' },
           ],
         },
       },
