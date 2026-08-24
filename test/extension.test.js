@@ -8,7 +8,7 @@ function createMockVscode({
   currentTheme = 'Default Dark+',
   startupSetting = false,
   defaultTheme = '',
-  themeType = 'system',
+  themeType = 'vs-dark',
 } = {}) {
   const updateCalls = [];
   const warnings = [];

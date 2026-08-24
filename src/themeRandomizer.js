@@ -49,7 +49,7 @@ function createExtensionApi(vscode, options = {}) {
 
     // Capture the theme that was active before the first randomization.
     if (!storedDefaultTheme && typeof currentTheme === 'string' && currentTheme.length > 0) {
-      await extensionConfiguration.update(CONFIG_DEFAULT_THEME, currentTheme, vscode.ConfigurationTarget.Global, );
+      await extensionConfiguration.update(CONFIG_DEFAULT_THEME, currentTheme, vscode.ConfigurationTarget.Global);
     }
 
     const themesOfRequestedType = themeType !== 'vs-dark'
